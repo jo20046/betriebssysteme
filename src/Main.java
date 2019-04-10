@@ -1,38 +1,39 @@
+import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        MyQueue myQueue = new MyQueue();
+        Queue queue = new Queue();
 
-        taskGenerator(myQueue, 5);
-        printCurrentQueue(myQueue);
+        taskGenerator(queue, 20);
+        printCurrentQueue(queue);
 
         Processor processor = new Processor();
+        processor.process(queue);
 
-        processor.process(myQueue);
-        System.out.println("processor.getAverageWait() = " + processor.getAverageWait());
+        System.out.println("\nprocessor.getAverageWait() = " + processor.getAverageWait());
 
     }
 
-    private static void taskGenerator(MyQueue myQueue, int amount) {
+    private static void taskGenerator(Queue queue, int amount) {
 
-        myQueue.clear();
+        queue.clear();
 
         for (int i = 0; i < amount; i++) {
-            int startTime = ThreadLocalRandom.current().nextInt(0, 10);
-            int duration = ThreadLocalRandom.current().nextInt(1, 11);
-            myQueue.push(new Task(startTime, duration));
+            int startTime = ThreadLocalRandom.current().nextInt(0, 100);
+            int duration = ThreadLocalRandom.current().nextInt(1, 101);
+            queue.push(new Task(startTime, duration));
         }
     }
 
-    private static void printCurrentQueue(MyQueue myQueue) {
+    private static void printCurrentQueue(Queue queue) {
 
-        System.out.println("\nNumber of Tasks in Queue: " + myQueue.size() + "\n");
+        System.out.println("\nNumber of Tasks in Queue: " + queue.size() + "\n");
         System.out.println("Current Tasks [StartTime, Duration]");
-        for (int i = 0; i < myQueue.size(); i++) {
-            Task tmp = myQueue.peek(i);
+        for (int i = 0; i < queue.size(); i++) {
+            Task tmp = queue.peek(i);
             System.out.println("Task " + i + ": [" + tmp.getStartTime() + ", " + tmp.getDuration() + "]");
         }
 

@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 import java.util.List;
 
-class MyQueue {
+class Queue {
 
     private List<Task> taskList = new ArrayList<>();
 
-    MyQueue() {
+    Queue() {
     }
 
     void push(Task newTask) {

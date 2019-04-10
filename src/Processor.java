@@ -4,10 +4,10 @@ class Processor {
 
     Processor() { }
 
-    void process(MyQueue schedule) {
+    void process(Queue schedule) {
 
         // List of Tasks that are currently waiting to be processed
-        MyQueue waitingTasks = new MyQueue();
+        Queue waitingTasks = new Queue();
 
         averageWait = 0;
         int totalWait = 0;
