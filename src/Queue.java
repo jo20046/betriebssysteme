@@ -46,19 +46,8 @@ class Queue {
         return returnTask;
     }
 
-    Task peek(int index) {
-        try {
-            return taskList.get(index);
-        } catch (IndexOutOfBoundsException e) {
-            return new Task(-1, -1);
-        }
-    }
-
     int size() {
         return taskList.size();
     }
 
-    void clear() {
-        taskList.clear();
-    }
 }

@@ -1,30 +1,36 @@
+import java.util.concurrent.ThreadLocalRandom;
+
 class Processor {
 
     private double averageWait;
+    private int runtime;
+    private int generateSpeed;
+    private int tasksFinished = 0;
 
-    Processor() { }
+    Processor(int runtime, int generateSpeed) {
+        this.runtime = runtime;
+        this.generateSpeed = generateSpeed;
+    }
 
-    void process(Queue schedule) {
+    void process() {
 
         // List of Tasks that are currently waiting to be processed
         Queue waitingTasks = new Queue();
 
         averageWait = 0;
         int totalWait = 0;
-        int tasksFinished = 0;
         boolean isActive = false;
         int activeUntil = 0;
 
-        for (int time = 0; schedule.size() > 0 || isActive; time++) {
+        generateTask(waitingTasks, 0, true);
+        for (int time = 0; waitingTasks.size() > 0 || isActive; time++) {
+
+            if (time < runtime) {
+                generateTask(waitingTasks, time, false);
+            }
 
             StringBuilder sb = new StringBuilder();
             sb.append("\nLoop: ").append(time).append("\n");
-            // Get all tasks that start at the current time and store them into waitingTasks
-            while (schedule.peek(0).getStartTime() == time) {
-                Task newTask = schedule.pull();
-                waitingTasks.push(newTask);
-                sb.append("Added task to waitingTasks. Duration: ").append(newTask.getDuration()).append("\n");
-            }
 
             // If the Processor has been active, check if the current task has finished
             if (isActive && activeUntil == time) {
@@ -47,7 +53,20 @@ class Processor {
         averageWait = (double) totalWait / (double) tasksFinished;
     }
 
+    private void generateTask(Queue waitingTasks, int time, boolean overwrite) {
+
+        boolean generateNew = ThreadLocalRandom.current().nextInt(0, 100) < generateSpeed;
+        if (generateNew || overwrite) {
+            int duration = ThreadLocalRandom.current().nextInt(10, 50);
+            waitingTasks.push(new Task(time, duration));
+        }
+    }
+
     double getAverageWait() {
         return averageWait;
+    }
+
+    int getTasksFinished() {
+        return tasksFinished;
     }
 }
